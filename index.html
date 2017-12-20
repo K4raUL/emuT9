@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+	<body onload="init()">
+		<script type="text/javascript" src="dict.js" ></script>
+
+		<input type="text" id="lineEdit" value=""><br>
+
+		<button type="button" onclick="getword(0)">0</button>
+		<button type="button" onclick="getword(1)">1</button>
+		<button type="button" onclick="getword(2)">2</button>
+		<button type="button" onclick="getword(3)">3</button>
+		<button type="button" onclick="getword(4)">4</button>
+		<button type="button" onclick="getword(5)">5</button>
+		<button type="button" onclick="getword(6)">6</button>
+		<button type="button" onclick="getword(7)">7</button>
+		<button type="button" onclick="getword(8)">8</button>
+		<button type="button" onclick="getword(9)">9</button>
+		
+		<button type="button" onclick="init()">Delete</button>
+		<button type="button" onclick="next()">Next</button>
+		
+		<script>
+			function init() {
+				comb = [];
+				iter = 0;
+				ans = '';
+				
+				for (var i = 0; i < dictionary.length; i++) {
+					possWords[i] = dictionary[i];
+				}
+				document.getElementById("lineEdit").value = '';
+			}
+			
+			function getword(val) {
+				iter = 0;
+				comb.push(val);
+				var pos = comb.length - 1;
+				
+				if (val == 0) {
+					print (t9[0][0]);
+					return;
+				}
+				if (val == 1) {
+					print (t9[1][0]);
+					return;
+				}
+				
+				for (var i = 0; i < possWords.length; i++) {
+					var checkGood = 0;
+					for (var k = 0; k < t9[val].length; k++) {
+						if (t9[val][k] == possWords[i][pos]) {
+							checkGood = 1;
+							break;
+						}
+					}
+					if (checkGood) continue;
+					possWords.splice(i, 1);
+					i--;
+				}
+
+				// printing in line edit
+				if (possWords.length == 0) {
+					var str = ans + val;
+					print(str);
+					return;
+				}
+				
+				var goodL = 0;
+				for (var i = 0; i < possWords.length; i++) {
+					if (possWords[i].length == comb.length) {
+						goodL = 1;
+						print(possWords[i]);
+						break;
+					}
+				}
+				if (!goodL) {
+					var cut = possWords[0];
+					cut.splice(comb.length, Number.MAX_VALUE);
+					print(cut);
+				}
+			}
+			
+			function next() {
+				iter++;
+				print(possWords[iter]);
+			}
+			
+			function print(val) {
+				ans = val;
+				alert (ans);
+				document.getElementById("lineEdit").value = val;
+			}
+		</script>
+
+	</body>
+</html>
