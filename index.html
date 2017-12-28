@@ -14,16 +14,18 @@
         	-khtml-user-select: none;
         	-webkit-user-select: none;
         	-o-user-select: none;	
+			-ms-user-select: none;
 			width: 33.33%;
    		}
 		
 		table {
 			margin-top: 10%;
 			user-select: none;
-        		-moz-user-select: none;
-        		-khtml-user-select: none;
-        		-webkit-user-select: none;
-        		-o-user-select: none;			
+        	-moz-user-select: none;
+        	-khtml-user-select: none;
+        	-webkit-user-select: none;
+        	-o-user-select: none;
+			-ms-user-select: none;
 		}
 
 		button {
@@ -33,7 +35,8 @@
         	-moz-user-select: none;
         	-khtml-user-select: none;
         	-webkit-user-select: none;
-        	-o-user-select: none;			
+        	-o-user-select: none;
+			-ms-user-select: none;			
 			font-size: 3vw;
 			border: 0;
 			width: 90%;
@@ -67,10 +70,12 @@
 			font-size: 1.7vw;
 			border: 0.3vw solid darkgrey;
 			width: 90%;
+			user-select: none;
         	-moz-user-select: none;
         	-khtml-user-select: none;
         	-webkit-user-select: none;
-        	-o-user-select: none;	
+        	-o-user-select: none;
+			-ms-user-select: none;			
 		}
    		 </style>
 	</head>
@@ -79,10 +84,10 @@
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script type="text/javascript" src="dict.js" ></script>
 
-		<table width=25% border="0" align="center">
+		<table id="main" width=25% border="0" align="center">
 
 		<tr>
-			<td colspan=3 align="center"><input type="text" id="lineEdit" value="" align="center" onkeypress="return runScript(event)" disabled><br><br><br><br></td>
+			<td colspan=3 align="center"><input type="text" id="lineEdit" value="" align="center" disabled><br><br><br><br></td>
 		</tr>		
 
 		
@@ -116,10 +121,13 @@
 </table>
 		
 		<script>
-			$('html').keydown(function(e){
+			$('body').keydown(function(e){
+				document.getElementById("main").focus();
+			
 				var code = e.which;
 				if (code == 46) init();
-				//if (code == 13) next();
+				if (code == 39) next();
+				if (code == 37) prev();
 				if (code == 32) getword(0);
 				
 				code -= 48;
@@ -129,13 +137,6 @@
 				if (code >= 0 && code < 10) getword(code);
 			});
 			
-			function runScript(e) {
-				if (e.keyCode == 13) {
-					next();
-					return false;
-				}
-			}
-		
 			function init() {
 				answer = '';
 				clear();
@@ -147,7 +148,8 @@
 				part = '';
 				possWords = [];
 				
-				document.getElementById("lineEdit").value = answer;			
+				document.getElementById("lineEdit").value = answer;
+				document.getElementById("main").focus();				
 			}
 			
 			function getword(val) {
@@ -213,8 +215,7 @@
 					}
 				}
 				if (!goodL) {
-					var cut = possWords[0];
-					cut.splice(comb.length, Number.MAX_VALUE);
+					var cut = possWords[0].slice(0, comb.length);
 					print(cut);
 				}			
 			}
@@ -230,20 +231,44 @@
 					}
 				}
 				
+				// no words of needed length
 				if (iter == possWords.length) iter = 0;
-				print(possWords[iter]);
+				var cut = possWords[iter].slice(0, comb.length);
+				print(cut);
+			}
+			
+			function prev() {
+				iter--;
+				
+				for (var i = iter; i >= 0; i--) {
+					if (possWords[i].length == comb.length) {
+						print(possWords[i]);
+						iter = i;
+						return;
+					}
+				}
+				
+				// no words of needed length
+				if (iter == -1) iter = possWords.length-1;
+				var cut = possWords[iter].slice(0, comb.length);
+				print(cut);
 			}
 			
 			function print(val) {
+				if (part == val) {
+					next();
+					return;
+				}
 				part = val;
-
+								
+				var res = answer+val;
 				var inputbox = document.getElementById("lineEdit");
-				
-				inputbox.value = answer+val;
-				
+
+				inputbox.value = res;
 				if (answer+val == "люблю пенис сосать нежно") inputbox.setAttribute("style", "color: #00ccff;"); 
 			}
 		</script>
 
 	</body>
 </html>
+
