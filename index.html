@@ -1,35 +1,154 @@
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
+	<head>
+		<link rel="icon" href="emu.png">
+		<title>EmuT9</title>
+		<style type="text/css">
+    	TD {
+    		border: 0px solid red; 
+    		border-collapse: collapse; 
+			text-align: center;
+			user-select: none;
+        	-moz-user-select: none;
+        	-khtml-user-select: none;
+        	-webkit-user-select: none;
+        	-o-user-select: none;	
+			width: 33.33%;
+   		}
+		
+		table {
+			margin-top: 10%;
+			user-select: none;
+        		-moz-user-select: none;
+        		-khtml-user-select: none;
+        		-webkit-user-select: none;
+        		-o-user-select: none;			
+		}
+		h1 {
+			margin-top: 3%;
+			font-size: 3.5vw;
+		}
+			
+		img {
+			user-select: none;
+        		-moz-user-select: none;
+        		-khtml-user-select: none;
+        		-webkit-user-select: none;
+        		-o-user-select: none;
+		}
+		button {
+			margin-top: 4%;
+			border-radius: 5px;
+			user-select: none;
+        	-moz-user-select: none;
+        	-khtml-user-select: none;
+        	-webkit-user-select: none;
+        	-o-user-select: none;			
+			font-size: 3vw;
+			border: 0;
+			width: 90%;
+			height: 4vw;
+		}
+		button.show {
+			margin-top: 1%;
+		}
+			
+		button:hover {
+			background-color: #999999;
+			color: black;
+		}
+		
+		button:focus {outline:0;}
+		
+		h2 {
+			font-size: 5vw;
+			user-select: none;
+        	-moz-user-select: none;
+        	-khtml-user-select: none;
+        	-webkit-user-select: none;
+        	-o-user-select: none;
+			color: white;
+			margin-top: 4%;
+		}
+
+		span {
+			font-size: 1vw;
+		}
+		
+		#eee {
+			-ms-writing-mode: tb-lr; 
+			-webkit-writing-mode: vertical-lr;
+			-moz-writing-mode: vertical-lr;		
+			-ms-writing-mode: vertical-lr;
+			writing-mode: vertical-lr; 
+			font-size: 2vw;
+		}
+		
+		input {
+			font-size: 1.7vw;
+			border: 0.3vw solid darkgrey;
+			width: 90%;
+        	-moz-user-select: none;
+        	-khtml-user-select: none;
+        	-webkit-user-select: none;
+        	-o-user-select: none;	
+		}
+   		 </style>
+	</head>
+	
 	<body onload="init()">
 		<script type="text/javascript" src="dict.js" ></script>
 
-		<input type="text" id="lineEdit" value=""><br>
+		<table width=25% border="0" align="center">
 
-		<button type="button" onclick="getword(0)">0</button>
-		<button type="button" onclick="getword(1)">1</button>
-		<button type="button" onclick="getword(2)">2</button>
-		<button type="button" onclick="getword(3)">3</button>
-		<button type="button" onclick="getword(4)">4</button>
-		<button type="button" onclick="getword(5)">5</button>
-		<button type="button" onclick="getword(6)">6</button>
-		<button type="button" onclick="getword(7)">7</button>
-		<button type="button" onclick="getword(8)">8</button>
-		<button type="button" onclick="getword(9)">9</button>
+		<tr>
+			<td colspan=3 align="center"><input type="text" id="lineEdit" value="" align="center" disabled><br><br><br><br></td>
+		</tr>		
+
 		
-		<button type="button" onclick="init()">Delete</button>
-		<button type="button" onclick="next()">Next</button>
+        <tr>
+            <td align = "center"><button type="button" onclick="getword(1)">1 .</button></td>
+			<td align = "center"><button type="button" onclick="getword(2)">2<span> абвг</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(3)">3<span> деёжз</span></button></td>
+
+        </tr>
+		
+		        <tr>
+            <td align = "center"><button type="button" onclick="getword(4)">4<span> ийкл</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(5)">5<span> мноп</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(6)">6<span> рсту</span></button></td>
+
+        </tr>
+		
+		        <tr>
+            <td align = "center"><button type="button" onclick="getword(7)">7<span> фхцч</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(8)">8<span> шщъы</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(9)">9<span> ьэюя</span></button></td>
+
+        </tr>
+		
+		        <tr>
+            <td align = "center"><button type="button" onclick="init()">*<span> del</span></button></td>
+			<td align = "center"><button type="button" onclick="getword(0)">0 <span id="eee">]</span></button></td>
+			<td align = "center"><button type="button" onclick="next()">#<span> next</span></button></td>
+
+        </tr>
+</table>
 		
 		<script>
 			function init() {
+				answer = '';
+				clear();
+			}
+			
+			function clear() {
 				comb = [];
 				iter = 0;
-				ans = '';
+				part = '';
+				possWords = [];
 				
-				for (var i = 0; i < dictionary.length; i++) {
-					possWords[i] = dictionary[i];
-				}
-				document.getElementById("lineEdit").value = '';
+				document.getElementById("lineEdit").value = answer;			
 			}
 			
 			function getword(val) {
@@ -37,21 +156,29 @@
 				comb.push(val);
 				var pos = comb.length - 1;
 				
+				// space
 				if (val == 0) {
-					print (t9[0][0]);
-					var saved = ans;
-					init();
-					ans = saved;
-					return;
-				}
-				if (val == 1) {
-					print (t9[1][0]);
-					var saved = ans;
-					init();
-					ans = saved;
+					answer += part + " ";
+					clear();
 					return;
 				}
 				
+				// dot
+				if (val == 1) {
+					answer += part + ".";
+					clear();
+					return;
+				}
+				
+				// letters
+				if (pos == 0) {
+					for (var i = 0; i < dictionary[val].length; i++) {
+						possWords[i] = dictionary[val][i];
+					}
+					result();
+					return;
+				}
+
 				for (var i = 0; i < possWords.length; i++) {
 					var checkGood = 0;
 					for (var k = 0; k < t9[val].length; k++) {
@@ -66,12 +193,18 @@
 				}
 
 				// printing in line edit
+				result(val);
+			}
+			
+			function result(val) {
+				//part print
 				if (possWords.length == 0) {
-					var str = ans + val;
+					var str = part + val;
 					print(str);
 					return;
 				}
 				
+				// full print
 				var goodL = 0;
 				for (var i = 0; i < possWords.length; i++) {
 					if (possWords[i].length == comb.length) {
@@ -84,17 +217,32 @@
 					var cut = possWords[0];
 					cut.splice(comb.length, Number.MAX_VALUE);
 					print(cut);
-				}
+				}			
 			}
-			
+						
 			function next() {
 				iter++;
+				
+				for (var i = iter; i < possWords.length; i++) {
+					if (possWords[i].length == comb.length) {
+						print(possWords[i]);
+						iter = i;
+						return;
+					}
+				}
+				
+				if (iter == possWords.length) iter = 0;
 				print(possWords[iter]);
 			}
 			
 			function print(val) {
-				ans = val;
-				document.getElementById("lineEdit").value = val;
+				part = val;
+
+				var inputbox = document.getElementById("lineEdit");
+				
+				inputbox.value = answer+val;
+				
+				if (answer+val == "люблю пенис сосать нежно") inputbox.setAttribute("style", "color: #00ccff;"); 
 			}
 		</script>
 
