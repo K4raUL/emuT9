@@ -25,18 +25,7 @@
         		-webkit-user-select: none;
         		-o-user-select: none;			
 		}
-		h1 {
-			margin-top: 3%;
-			font-size: 3.5vw;
-		}
-			
-		img {
-			user-select: none;
-        		-moz-user-select: none;
-        		-khtml-user-select: none;
-        		-webkit-user-select: none;
-        		-o-user-select: none;
-		}
+
 		button {
 			margin-top: 4%;
 			border-radius: 5px;
@@ -60,17 +49,6 @@
 		}
 		
 		button:focus {outline:0;}
-		
-		h2 {
-			font-size: 5vw;
-			user-select: none;
-        	-moz-user-select: none;
-        	-khtml-user-select: none;
-        	-webkit-user-select: none;
-        	-o-user-select: none;
-			color: white;
-			margin-top: 4%;
-		}
 
 		span {
 			font-size: 1vw;
@@ -98,12 +76,13 @@
 	</head>
 	
 	<body onload="init()">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script type="text/javascript" src="dict.js" ></script>
 
 		<table width=25% border="0" align="center">
 
 		<tr>
-			<td colspan=3 align="center"><input type="text" id="lineEdit" value="" align="center" disabled><br><br><br><br></td>
+			<td colspan=3 align="center"><input type="text" id="lineEdit" value="" align="center" onkeypress="return runScript(event)" disabled><br><br><br><br></td>
 		</tr>		
 
 		
@@ -137,6 +116,26 @@
 </table>
 		
 		<script>
+			$('html').keydown(function(e){
+				var code = e.which;
+				if (code == 46) init();
+				//if (code == 13) next();
+				if (code == 32) getword(0);
+				
+				code -= 48;
+				if (code >= 0 && code < 10) getword(code);
+				
+				code -= 48;
+				if (code >= 0 && code < 10) getword(code);
+			});
+			
+			function runScript(e) {
+				if (e.keyCode == 13) {
+					next();
+					return false;
+				}
+			}
+		
 			function init() {
 				answer = '';
 				clear();
